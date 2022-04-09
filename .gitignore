@@ -1,0 +1,5 @@
+front-end/node_modules
+back-end/*.db
+back-end/.idea
+back-end/venv
+back-end/BD_test.py
