@@ -34,10 +34,50 @@ function WindowGraphs(props) {
         <p>Зависимость количества кликов от типа браузера</p>
       </div>
       <div style={{ display: "flex", flexWrap: "wrap" }}>
-
       </div>
     </div>
   );
+}
+
+function FiltersHeatMap(props) {
+  return (
+    <div className="filter">
+      <h1>Heatmap</h1>
+      <label for="page">Выберите страницу</label>
+      <select id="page" className="choosePage" onChange={ChoosePage}>
+        <option value="home" selected>Home</option>
+        <option value="grid">Grid</option>
+        <option value="product">Product</option>
+      </select>
+    </div>
+  );
+}
+
+function FiltersGraphs(props) {
+  return (
+    <h1>Graphs</h1>
+  );
+}
+
+function ChoosePage() {
+  let select = document.querySelector('.choosePage')
+  let myFrame = document.getElementById("heatmap-home")
+  let choice = select.value;
+
+  switch (choice) {
+    case 'home':
+      myFrame.setAttribute("src", "http://localhost:3000/");
+      break;
+    case 'grid':
+      myFrame.setAttribute("src", "http://localhost:3000/grid");
+      break;
+    case 'product':
+      myFrame.setAttribute("src", "http://localhost:3000/product");
+      break;
+    default:
+
+  }
+
 }
 
 
@@ -56,13 +96,18 @@ class GraphContainer extends React.Component {
   }
 
   render() {
+    // choose graphs or heatmap logic
     const isHeatMap = this.state.isHeatMap;
     let window = null;
+    let filters = null;
     if (isHeatMap) {
+      filters = <FiltersHeatMap />
       window = <WindowHeatMap />
     } else {
+      filters = <FiltersGraphs />
       window = <WindowGraphs />;
     }
+
     return (
       <section className="graphs" >
         <div className="graphs-container">
@@ -75,7 +120,9 @@ class GraphContainer extends React.Component {
             </button>
           </div>
           <div className="graphs-main-content">
-            <div className="graphs-filters"></div>
+            <div className="graphs-filters">
+              {filters}
+            </div>
             <div className="graphs-window">
               {window}
             </div>

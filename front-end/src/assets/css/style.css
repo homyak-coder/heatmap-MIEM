@@ -2319,3 +2319,8 @@ template {
   /* margin-top: -80px; */
   margin-bottom: -150px;
 }
+
+.graphs-main-content {
+  display: flex;
+  flex-direction: column;
+}
