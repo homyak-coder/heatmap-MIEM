@@ -316,7 +316,6 @@ def get_graph():
     data = json.loads(data_sample)
     return json.dumps(data)
 
-# dsds
 # НОВЫЙ БЭК
 # получение доступных параметров фильтрации:
 @app.route('/get_list_of/<string:item>')
@@ -350,7 +349,7 @@ def get_list_of(item):
     return json.dumps(data)
 
 
-# Лучший фильтр
+# новый фильтр
 @app.route('/get_smart_heatmap/page/<string:page>/browser/<string:browser>/gadget_type/<string:gadget_type>')
 @cross_origin()
 def get_smart_heatmap(page, browser, gadget_type):
