@@ -21,6 +21,11 @@ sql.execute('''CREATE TABLE IF NOT EXISTS `tb_clicks` (
     `type_id` TINYINT  UNSIGNED NOT NULL,
     `page_id` TINYINT UNSIGNED NOT NULL
     )''')
+#     `OS_id` TINYINT UNSIGNED NOT NULL
+
+sql.execute('''CREATE TABLE IF NOT EXISTS `tb_page` (
+    `page` CHARACTER NOT NULL
+    )''')
 
 sql.execute('''CREATE TABLE IF NOT EXISTS `tb_browser` (
     `browser` CHARACTER NOT NULL
@@ -30,9 +35,9 @@ sql.execute('''CREATE TABLE IF NOT EXISTS `tb_gadget_type` (
     `gadget_type` CHARACTER NOT NULL
     )''')
 
-sql.execute('''CREATE TABLE IF NOT EXISTS `tb_page` (
-    `page` CHARACTER NOT NULL
-    )''')
+# sql.execute('''CREATE TABLE IF NOT EXISTS `tb_OS` (
+#     `OS` CHARACTER NOT NULL
+#     )''')
 db.commit()
 
 
