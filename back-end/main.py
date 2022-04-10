@@ -354,7 +354,7 @@ def get_list_of(item):
     return json.dumps(data)
 
 
-# новый фильтр
+# новый фильтр ass
 @app.route('/get_smart_heatmap/page/<string:page>/browser/<string:browser>/gadget_type/<string:gadget_type>')
 @cross_origin()
 def get_smart_heatmap(page, browser, gadget_type):
