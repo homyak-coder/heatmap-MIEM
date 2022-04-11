@@ -64,10 +64,13 @@ def show():
 
 @app.route('/send_site', methods=['post'])
 @cross_origin()
-def send_user():
+def send_site():
     data = request.get_json(force=True)
-    URL = data['URL']
-    site_name = URL[8:][:URL.find("/")]
+    url = data['URL']
+    num = url.find("/") + 2
+    url = url[num:]
+    site_name = url[:url.find("/")]
+
 
     select = 'SELECT rowid, value FROM tb_sites WHERE site = "%s"'
     lock.acquire()  # смотрю есть ли уже site_name в tb_sites:
@@ -256,6 +259,8 @@ def get_list_of(item):
         select = 'SELECT rowid, gadget_type FROM tb_gadget_type'
     elif item == 'OS':
         select = 'SELECT rowid, OS FROM tb_OS'
+    elif item == 'site':
+        select = 'SELECT rowid, site FROM tb_sites'
     else:
         print("URL с ошибкой")
         ans = json.loads('{"data": []}')
