@@ -2179,7 +2179,10 @@ template {
   color: darkturquoise;
 }
 
-.pages-buttons, .classic-buttons, .browser-buttons, .filter-buttons{
+.pages-buttons,
+.classic-buttons,
+.browser-buttons,
+.filter-buttons {
   display: flex;
   flex-direction: column;
 }
@@ -2313,6 +2316,11 @@ template {
 }
 
 .heatmap-pic {
-  margin-top: -80px;
+  /* margin-top: -80px; */
   margin-bottom: -150px;
+}
+
+.graphs-main-content {
+  display: flex;
+  flex-direction: column;
 }

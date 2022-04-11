@@ -15,7 +15,7 @@ function Grid() {
     }
     let computerInfo = detect.parse(navigator.userAgent);
     const enterTime = sessionStorage.getItem("startTime");
-    document.querySelector(".grid-page").addEventListener("click", (ev) => {
+    document.querySelector(".grid").addEventListener("click", (ev) => {
       const date = new Date();
       let currentTime = Date.now();
       let spentTime = (currentTime - enterTime) / 1000;
@@ -46,7 +46,7 @@ function Grid() {
     };
   })
   return (
-    <section class="grid-page">
+    <section class="grid">
       <Header />
       <GridDefault name="Shop Grid Default" />
       <MainItems />
