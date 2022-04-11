@@ -17,7 +17,7 @@ const Product = (props) => {
     }
     let computerInfo = detect.parse(navigator.userAgent);
     const enterTime = sessionStorage.getItem("startTime");
-    document.querySelector(".productPage").addEventListener("click", (ev) => {
+    document.querySelector(".product").addEventListener("click", (ev) => {
       const date = new Date();
       let currentTime = Date.now();
       let spentTime = (currentTime - enterTime) / 1000;
@@ -48,7 +48,7 @@ const Product = (props) => {
     };
   })
   return (
-    <section class="productPage">
+    <section class="product">
       <Header />
       <GridDefault name="Product Details" />
       <Playwood />
