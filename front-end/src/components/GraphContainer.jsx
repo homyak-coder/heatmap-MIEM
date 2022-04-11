@@ -51,35 +51,48 @@ function FiltersHeatMap(props) {
       </select>
       <button onClick={ViewHeatMap}>ФИЛЬТР по кликам</button>
       <label for="browser">ФИЛЬТР по браузеру</label>
-      <select id="browser" className="chooseBrowser" onChange={() => { ChooseBrowser(props.homeData, props.gridData, props.productData) }}>
+      <select id="browser" className="chooseBrowser" onChange={() => { Choose(props.homeDataBr, props.gridDataBr, props.productDataBr, "browser") }}>
         <option value="">--Сделайте выбор--</option>
         {props.browsers}
+      </select>
+      <label for="browser">ФИЛЬТР по гаджету</label>
+      <select id="browser" className="chooseGadget" onChange={() => { Choose(props.homeDataGg, props.gridDataGg, props.productDataGg, "gadget") }}>
+        <option value="">--Сделайте выбор--</option>
+        {props.gadgets}
       </select>
     </div>
   );
 }
 
-function ChooseBrowser(home, grid, product) {
+function Choose(home, grid, product, type) {
   let myFrame = document.getElementById("heatmap-home")
   let name = myFrame.getAttribute("src");
-
-  let select = document.querySelector('.chooseBrowser')
+  let select
+  if (type == "browser") {
+    select = document.querySelector('.chooseBrowser')
+  }
+  else if (type == "gadget") {
+    select = document.querySelector('.chooseGadget')
+  }
   let choice = select.value;
 
   if (choice == "") {
     document.querySelector(".heatmap-home").contentDocument.querySelector('canvas').remove()
     return
   }
+  if (document.querySelector(".heatmap-home").contentDocument.querySelector('canvas') != null) {
+    document.querySelector(".heatmap-home").contentDocument.querySelector('canvas').remove()
+  }
 
-  let dataBrowser = [];
+  let dataForHeatMap = []
   let page = "";
   if (name == "http://localhost:3000/") {
     page = "home"
     for (let i = 0; i < home.length; i++) {
       for (let key in home[i]) {
         if (key.indexOf(choice) + 1) {
-          dataBrowser = dataBrowser.concat(
-            dataBrowser,
+          dataForHeatMap = dataForHeatMap.concat(
+            dataForHeatMap,
             home[i][key]
           )
         }
@@ -91,8 +104,8 @@ function ChooseBrowser(home, grid, product) {
     for (let i = 0; i < grid.length; i++) {
       for (let key in grid[i]) {
         if (key.indexOf(choice) + 1) {
-          dataBrowser = dataBrowser.concat(
-            dataBrowser,
+          dataForHeatMap = dataForHeatMap.concat(
+            dataForHeatMap,
             grid[i][key]
           )
         }
@@ -104,8 +117,8 @@ function ChooseBrowser(home, grid, product) {
     for (let i = 0; i < product.length; i++) {
       for (let key in product[i]) {
         if (key.indexOf(choice) + 1) {
-          dataBrowser = dataBrowser.concat(
-            dataBrowser,
+          dataForHeatMap = dataForHeatMap.concat(
+            dataForHeatMap,
             product[i][key]
           )
         }
@@ -113,10 +126,11 @@ function ChooseBrowser(home, grid, product) {
     }
   }
 
+
   let data = {
     max: 15,
     min: 0,
-    data: dataBrowser,
+    data: dataForHeatMap,
   };
 
   let heatmap = document
@@ -211,7 +225,11 @@ class GraphContainer extends React.Component {
       browsersItems: null,
       browsersHomeData: null,
       browsersGridData: null,
-      browsersProductData: null
+      browsersProductData: null,
+      gadgetsItems: null,
+      gadgetsHomeData: null,
+      gadgetsGridData: null,
+      gadgetsProductData: null
     };
   }
   componentDidMount() {
@@ -221,8 +239,13 @@ class GraphContainer extends React.Component {
         axios.get(`http://127.0.0.1:5000/get_heatmap/browser/grid`),
         axios.get(`http://127.0.0.1:5000/get_heatmap/browser/product`),
         axios.get(`http://127.0.0.1:5000/get_list_of/browser`),
+        axios.get(`http://127.0.0.1:5000/get_heatmap/gadget_type/home`),
+        axios.get(`http://127.0.0.1:5000/get_heatmap/gadget_type/grid`),
+        axios.get(`http://127.0.0.1:5000/get_heatmap/gadget_type/product`),
+        axios.get(`http://127.0.0.1:5000/get_list_of/gadget_type`)
       ])
       .then((response) => {
+        // for browsers
         let browsers = []
         let currentBrowsers = []
         let data = response[3].data.data
@@ -234,15 +257,27 @@ class GraphContainer extends React.Component {
         for (let browser of browsersSet) {
           browsers.push(browser)
         }
-        console.log(browsers)
         const browsersItems = browsers.map((browser) =>
           <option value={browser}>{browser}</option>
+        );
+        // for gadgets
+        let gadgets = []
+        let dataGg = response[7].data.data
+        for (let i = 0; i < dataGg.length; i++) {
+          gadgets.push(dataGg[i][i + 1])
+        }
+        const gadgetsItems = gadgets.map((gadget) =>
+          <option value={gadget}>{gadget}</option>
         );
         this.setState({
           browsersHomeData: response[0].data.data,
           browsersGridData: response[1].data.data,
           browsersProductData: response[2].data.data,
-          browsersItems: browsersItems
+          browsersItems: browsersItems,
+          gadgetsHomeData: response[4].data.data,
+          gadgetsGridData: response[5].data.data,
+          gadgetsProductData: response[6].data.data,
+          gadgetsItems: gadgetsItems
         })
       })
       .catch((error) => {
@@ -264,9 +299,13 @@ class GraphContainer extends React.Component {
     if (isHeatMap) {
       filters = <FiltersHeatMap
         browsers={this.state.browsersItems}
-        homeData={this.state.browsersHomeData}
-        gridData={this.state.browsersGridData}
-        productData={this.state.browsersProductData} />
+        homeDataBr={this.state.browsersHomeData}
+        gridDataBr={this.state.browsersGridData}
+        productDataBr={this.state.browsersProductData}
+        gadgets={this.state.gadgetsItems}
+        homeDataGg={this.state.gadgetsHomeData}
+        gridDataGg={this.state.gadgetsGridData}
+        productDataGg={this.state.gadgetsProductData} />
       window = <WindowHeatMap />
     } else {
       filters = <FiltersGraphs />
