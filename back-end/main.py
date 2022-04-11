@@ -167,6 +167,7 @@ def send_data():
 @app.route('/get_gist/<string:theme>')
 @cross_origin()
 def get_gist(theme):
+
     if theme == 'page':
         select = '''SELECT b.page, SUM(a.value) 
                     FROM tb_clicks AS a INNER JOIN tb_page AS b 
